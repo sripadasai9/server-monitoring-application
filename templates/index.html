@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Server Monitoring Platform</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div>
+        <h1>Server Monitoring Platform</h1>
+        <p>Infrastructure health and performance monitoring</p>
+    </div>
+
+    <div class="overall-status">
+        <span class="status-dot" id="overallDot"></span>
+        <span id="overallHealth">Connecting...</span>
+    </div>
+</header>
+
+
+<main class="dashboard">
+
+    <!-- SERVER OVERVIEW -->
+
+    <section class="server-overview">
+
+        <div>
+            <span class="label">HOSTNAME</span>
+            <strong id="hostname">Loading...</strong>
+        </div>
+
+        <div>
+            <span class="label">OPERATING SYSTEM</span>
+            <strong id="os">--</strong>
+        </div>
+
+        <div>
+            <span class="label">CPU CORES</span>
+            <strong id="cpuCount">--</strong>
+        </div>
+
+        <div>
+            <span class="label">UPTIME</span>
+            <strong id="uptime">--</strong>
+        </div>
+
+    </section>
+
+
+    <!-- RESOURCE METRICS -->
+
+    <section class="metrics-grid">
+
+        <div class="card metric-card">
+
+            <div class="card-heading">
+                <h2>CPU Usage</h2>
+                <span class="health-tag" id="cpuHealth">--</span>
+            </div>
+
+            <div class="metric-value" id="cpu">--%</div>
+
+            <div class="progress">
+                <div class="progress-fill" id="cpuBar"></div>
+            </div>
+
+            <p class="description">Processor utilization</p>
+
+        </div>
+
+
+        <div class="card metric-card">
+
+            <div class="card-heading">
+                <h2>Memory Usage</h2>
+                <span class="health-tag" id="memoryHealth">--</span>
+            </div>
+
+            <div class="metric-value" id="memory">--%</div>
+
+            <div class="progress">
+                <div class="progress-fill" id="memoryBar"></div>
+            </div>
+
+            <p class="description" id="memoryDetails">Loading...</p>
+
+        </div>
+
+
+        <div class="card metric-card">
+
+            <div class="card-heading">
+                <h2>Disk Usage</h2>
+                <span class="health-tag" id="diskHealth">--</span>
+            </div>
+
+            <div class="metric-value" id="disk">--%</div>
+
+            <div class="progress">
+                <div class="progress-fill" id="diskBar"></div>
+            </div>
+
+            <p class="description" id="diskDetails">Loading...</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- NETWORK METRICS -->
+
+    <section class="network-grid">
+
+        <div class="card">
+
+            <h2>Network Download</h2>
+
+            <div class="metric-value" id="downloadSpeed">
+                -- Mbps
+            </div>
+
+            <p class="description">Incoming traffic rate</p>
+
+            <p class="description" id="receivedTotal">
+                Total received: --
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Network Upload</h2>
+
+            <div class="metric-value" id="uploadSpeed">
+                -- Mbps
+            </div>
+
+            <p class="description">Outgoing traffic rate</p>
+
+            <p class="description" id="sentTotal">
+                Total sent: --
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- HISTORICAL CHARTS -->
+
+    <section class="charts-grid">
+
+        <div class="card chart-card">
+            <h2>CPU Utilization History</h2>
+            <canvas id="cpuChart"></canvas>
+        </div>
+
+        <div class="card chart-card">
+            <h2>Memory Utilization History</h2>
+            <canvas id="memoryChart"></canvas>
+        </div>
+
+        <div class="card chart-card">
+            <h2>Network Traffic History</h2>
+            <canvas id="networkChart"></canvas>
+        </div>
+
+    </section>
+
+
+    <!-- PROCESS MONITORING -->
+
+    <section class="process-grid">
+
+        <div class="card table-card">
+
+            <h2>Top 5 CPU Consuming Processes</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>Process</th>
+                            <th>CPU %</th>
+                            <th>Memory MB</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="cpuProcesses">
+                        <tr>
+                            <td colspan="4">Loading processes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="card table-card">
+
+            <h2>Top 5 Memory Consuming Processes</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>Process</th>
+                            <th>Memory %</th>
+                            <th>Memory MB</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="memoryProcesses">
+                        <tr>
+                            <td colspan="4">Loading processes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ALERT MANAGEMENT -->
+
+    <section class="card alerts-card">
+
+        <div class="card-heading">
+            <h2>Server Alerts</h2>
+            <span id="alertCount" class="alert-count">0 Alerts</span>
+        </div>
+
+        <div id="alertsList">
+            <p class="description">Loading alerts...</p>
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer-info">
+
+        <span id="lastUpdated">Waiting for metrics...</span>
+
+        <span id="connectionStatus">Connecting...</span>
+
+    </footer>
+
+</main>
+
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+</html>
